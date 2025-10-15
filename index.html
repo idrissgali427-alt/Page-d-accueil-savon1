@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GaliBusiness - Tableau de Bord Lumineux et Vif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Variables CSS (Tropical Vibe / Glassmorphism) */
+        :root {
+            --primary-color: #00b4d8; /* Bleu Ciel Vif */
+            --secondary-color: #0077b6; /* Bleu Océan */
+            --accent-color: #ffb703; /* Jaune Solaire/Mangue */
+            --background-start: #e0f2f1; /* Fond très clair */
+            --background-end: #b2ebf2; /* Fond dégradé léger */
+            --card-color-alpha: rgba(255, 255, 255, 0.7); /* Blanc semi-transparent */
+            --text-color: #1c4568; /* Bleu foncé pour le contraste */
+            --font-family: 'Poppins', sans-serif;
+            --border-radius: 20px;
+            --shadow-light: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            --shadow-hover: 0 12px 40px 0 rgba(31, 38, 135, 0.3);
+        }
+
+        /* Réinitialisation de base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* --- En-tête (Header) --- */
+        .card-header-top {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .gali-nav {
+            padding: 10px 30px;
+            background-color: var(--primary-color);
+        }
+
+        .cylindrical-header {
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+
+        .cylindrical-header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cylindrical-header h1 .fas {
+            color: var(--accent-color);
+            margin-left: 10px;
+        }
+
+        .header-info {
+            font-size: 1em;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-weight: 400;
+            color: #e0fbfc;
+            padding-top: 10px;
+        }
+
+        .header-info span .fas, .header-info span .far {
+            margin-right: 8px;
+            color: var(--accent-color);
+        }
+
+        /* --- Conteneur principal (Main Grid) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Cartes (Cards) - Glassmorphism Effect --- */
+        .card {
+            background: var(--card-color-alpha);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            /* L'effet Verre Dépoli */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .card h2 .fas {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        /* --- Dropdown General --- */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropbtn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.05em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropbtn::after {
+            content: "\f054"; /* Chevron droit */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-left: 10px;
+            font-size: 0.8em;
+            transition: transform 0.3s;
+        }
+        
+        .dropbtn.active::after {
+             content: "\f078"; /* Chevron bas */
+        }
+
+        .dropbtn:hover {
+            background-color: var(--secondary-color);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--card-color-alpha);
+            min-width: 100%;
+            box-shadow: var(--shadow-light);
+            z-index: 10;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s, color 0.3s;
+            border-left: 5px solid transparent;
+            font-size: 0.95em;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .dropdown-content a .fas {
+            margin-right: 12px;
+            width: 18px;
+            color: var(--secondary-color);
+        }
+
+        /* Style spécifique pour la navigation principale (en haut) */
+        .gali-nav .dropdown {
+            width: auto;
+        }
+
+        .gali-nav .dropbtn {
+            background-color: transparent;
+            color: white;
+            padding: 8px 15px;
+            width: auto;
+            box-shadow: none;
+        }
+
+        .gali-nav .dropdown-content {
+            top: 100%;
+            left: 0;
+            border-top: none;
+        }
+
+        .gali-nav .dropdown:hover .dropbtn {
+            background-color: var(--secondary-color);
+        }
+        
+        /* Couleurs d'icônes pour la cohérence */
+        .payroll-card h2 .fas { color: #e91e63; } /* Rose vif */
+        .ceo-card h2 .fas { color: #4caf50; } /* Vert Émeraude */
+        .client-card h2 .fas { color: #f44336; } /* Rouge Éclatant */
+        .divers-card h2 .fas { color: #9c27b0; } /* Violet Royal */
+
+        /* Pied de page */
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 0.85em;
+        }
+
+        /* Media Queries pour l'adaptabilité */
+        @media (max-width: 768px) {
+            .grid-container {
+                padding: 15px;
+                gap: 20px;
+            }
+            .cylindrical-header h1 {
+                font-size: 2.2em;
+            }
+            .header-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="card-header-top">
+        <nav class="gali-nav">
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fas fa-satellite-dish"></i> Réseau</button>
+                <div class="dropdown-content">
+                    <a href="https://congobet.net/sports"><i class="fas fa-link"></i> congobet1</a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="cylindrical-header">
+            <div class="header-content-box">
+                <h1>GaliBusiness <i class="fas fa-chart-area"></i></h1>
+                <div class="header-info">
+                    <span id="date-time"><i class="far fa-calendar-alt"></i> Chargement...</span>
+                    <span id="weather-info"><i class="fas fa-sun"></i> Chargement...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="grid-container">
+        <section class="card payroll-card dropdown-section">
+            <h2><i class="fas fa-coins"></i> Logiciel de Paie</h2>
+            <div class="dropdown">
+                <button class="dropbtn">Suivi de Travail d'Employé</button>
+                <div class="dropdown-content">
+                    <a href="https://employer-savon1.vercel.app/"><i class="fas fa-users-cog"></i> Employés</a>
+                    <a href=""><i class="fas fa-stopwatch"></i> Heure Supplémentaire</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="card ceo-card dropdown-section">
+            <h2><i class="fas fa-leaf"></i> Savonnerie1 (Production)</h2>
+            <div class="dropdown">
+                <button class="dropbtn">Gestion de la Savonnerie</button>
+                <div class="dropdown-content">
+                    <a href=""><i class="fas fa-boxes"></i> Achats & Stocks</a>
+                    <a href="https://calculator-savon1.vercel.app/"><i class="fas fa-calculator"></i> Calculateur1</a>
+                    <a href="https://savonnerie1.vercel.app/"><i class="fas fa-industry"></i> Savonnerie1 (App)</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="card client-card dropdown-section">
+            <h2><i class="fas fa-handshake"></i> Service Clientèle (CRM)</h2>
+            <div class="dropdown">
+                <button class="dropbtn">Gestion des Clients</button>
+                <div class="dropdown-content">
+                    <a href=""><i class="fas fa-user-tag"></i> Fiches Clients (À remplir)</a>
+                    <a href=""><i class="fas fa-inbox"></i> Suivi des Demandes (À remplir)</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="card divers-card dropdown-section">
+            <h2><i class="fas fa-sitemap"></i> Divers (Ressources)</h2>
+            <div class="dropdown">
+                <button class="dropbtn">Outils & Projets</button>
+                <div class="dropdown-content">
+                    <a href="https://idrissgali427-alt.github.io/Blocs-note/"><i class="fas fa-book-open"></i> Bloc-notes</a>
+                    <a href="https://fiche-technique-pdg.vercel.app/"><i class="fas fa-file-alt"></i> Fiche de Travail</a>
+                    <a href=""><i class="fas fa-chart-pie"></i> Rapports/Statistiques (À remplir)</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2024 GaliBusiness. Conçu pour la clarté et l'efficacité à Brazzaville. 🇨🇬
+    </footer>
+
+    <script>
+        // Fonction pour afficher la date et l'heure actuelles
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const formattedDate = now.toLocaleDateString('fr-FR', options);
+            document.getElementById('date-time').innerHTML = `<i class="far fa-calendar-alt"></i> ${formattedDate}`;
+        }
+
+        // Fonction pour simuler les informations météo (ajustée pour le style BZV / Tropical)
+        function fetchWeather() {
+            // Simulation pour l'exemple (en supposant le soleil typique de BZV)
+            const weather = {
+                city: 'Brazzaville',
+                temp: '30°C',
+                condition: 'Chaud et Humide'
+            };
+            document.getElementById('weather-info').innerHTML = 
+                `<i class="fas fa-sun"></i> ${weather.city}, ${weather.temp} - ${weather.condition}`;
+        }
+
+        // Fonction pour gérer l'ouverture/fermeture des dropdowns au clic
+        function setupDropdowns() {
+            const dropdowns = document.querySelectorAll('.dropdown-section .dropdown');
+
+            dropdowns.forEach(dropdown => {
+                const button = dropdown.querySelector('.dropbtn');
+                const content = dropdown.querySelector('.dropdown-content');
+
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation(); 
+
+                    const isVisible = content.style.display === 'block';
+
+                    // Ferme tous les autres dropdowns ouverts
+                    dropdowns.forEach(otherDropdown => {
+                        const otherContent = otherDropdown.querySelector('.dropdown-content');
+                        const otherButton = otherDropdown.querySelector('.dropbtn');
+
+                        if (otherDropdown !== dropdown && otherContent.style.display === 'block') {
+                            otherContent.style.display = 'none';
+                            otherButton.classList.remove('active');
+                        }
+                    });
+
+                    // Inverse l'état du dropdown actuel
+                    content.style.display = isVisible ? 'none' : 'block';
+                    button.classList.toggle('active', !isVisible);
+                });
+            });
+
+            // Fermer les dropdowns si l'utilisateur clique n'importe où ailleurs
+            window.onclick = function(event) {
+                if (!event.target.matches('.dropbtn')) {
+                    dropdowns.forEach(dropdown => {
+                        dropdown.querySelector('.dropdown-content').style.display = 'none';
+                        dropdown.querySelector('.dropbtn').classList.remove('active');
+                    });
+                }
+            }
+        }
+
+
+        // Exécution des fonctions au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 60000); 
+            fetchWeather();
+            setupDropdowns();
+        });
+    </script>
+</body>
+</html>
